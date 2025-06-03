@@ -15,6 +15,7 @@ def normalizar(text):
     # La función normalize() del módulo unicodedata separa símbolos de letras permitiendo que el intérprete
     # lea cada símbolo por separado (ej: á = a + ´ ).
     # Además, se usa el método .lower() para pasar todo a minúsculas antes de normalizarlo.
+
     text_normalizado = normalize('NFKD', text.lower())
 
     # Se evalúa cada caracter verificando que se corresponda con la categoría 'Ll' que corresponde a letras minúsculas
@@ -38,7 +39,7 @@ def permutar(text):
         # Se emplea el método de slicing.
         # El primer par de corchetes toma los primeros dos caracteres de la cadena ingresada
         # El segundo par invierte su orden
-        par_permutado = text[:2][::-1]
+        par_permutado = text[:2][::-1]      # [::]
 
         # Se agrega el par permutado en la variable final
         text_permutado += par_permutado
@@ -56,13 +57,13 @@ def desplazar(text, n):
     # Se define la variable final
     palabra_desplazada = ""
 
-    # Se busca el índice de cada letra de la cadena de entrada dentro de la lista 'alfabeto' y se le suma 3 para tomar
-    # la letra que se encuentra tres lugares después
+    # Se busca el índice de cada letra de la cadena de entrada dentro de la lista 'alfabeto' y se le suma 'n' para tomar
+    # la letra que se encuentra n lugares después
     for letra in text:
         num = alfabeto.index(letra) + n
 
         # Para evitar errores, se verifica si el índice 'num' excede el largo de la lista 'alfabeto'.
-        # Si esto sucede, se le resta al índice (luego de haberle sumado 3) el largo de la lista, resultando el índice
+        # Si esto sucede, se le resta al índice (luego de haberle sumado n) el largo de la lista, resultando el índice
         # correcto.
         if num > len(alfabeto) - 1:
             palabra_desplazada += alfabeto[num - len(alfabeto)]
