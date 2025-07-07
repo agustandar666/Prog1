@@ -1,20 +1,3 @@
-from tg2_pruebas import *
-'''
-def borrar_palabras_restringidas(busqueda):
-    with open("RestringidasNormalizado.txt", "r", encoding="utf-8") as archivo:
-        palabras_restringidas = [linea.strip() for linea in archivo]
-
-        palabras_noticia = busqueda.split()
-        busqueda_filtrada = [palabra for palabra in palabras_noticia if palabra not in palabras_restringidas]
-
-
-        return busqueda_filtrada
-
-
-
-print(borrar_palabras_restringidas("como usar una api de programacion"))
-'''
-
 from tg2_funciones import *
 
 salir = False
@@ -46,9 +29,21 @@ while not salir:
 
             dicc_idf = calcular_idf(listado_noticias, terminos)
 
-            top3_noticias = top3(dicc_tf, dicc_idf, noticia)
+            dicc_tf_x_idf = {}
 
+            for termino in terminos:
+                if termino in dicc_tf:
+                    dicc_tf_x_idf[termino] = dicc_tf[termino] * dicc_idf[termino]
+                else:
+                    dicc_tf_x_idf[termino] = 0
 
+            for elemento in dicc_tf_x_idf:
+
+                suma_tfidf += dicc_tf_x_idf[elemento]
+
+            puntaje_por_noticia[noticia] = suma_tfidf
+
+        print(puntaje_por_noticia)
 
     else:
 

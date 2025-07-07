@@ -1,20 +1,31 @@
-from unicodedata import *
-import math
-
 import requests
-api_key = "b3d238f8fad0471f865cfe444d89fe8a"
+import math
+from unicodedata import *
 
 
+# Función que normaliza el texto ingresado
+def normalizar(text):
 
-'''
-Esta función utiliza el servicio newsapi para obtener una lista de noticias.
-La función obtiene solo las noticias para Uruguay y las devuelve en una lista
-Cada noticia contiene los primeros 200 caracters de la noticia completa.
-'''
+    # La función normalize() del módulo unicodedata separa símbolos de letras permitiendo que el intérprete
+    # lea cada símbolo por separado (ej: á = a + ´ ).
+    # Además, se usa el método .lower() para pasar todo a minúsculas antes de normalizarlo.
 
-def get_news_content():
+    text_normalizado = normalize('NFKD', text.lower())
+
+    # Se evalúa cada caracter verificando que se corresponda con la categoría 'Ll' (que corresponde a letras minúsculas)
+    # y que sea distinto de un caracter de espacio, conservando los espacios para luego poder leer cada palabra por
+    # separado
+    for caracter in text_normalizado:
+        if category(caracter) != 'Ll' and caracter != " ":
+            text_normalizado = text_normalizado.replace(caracter, "")
+
+    # Devuelve una cadena compuesta únicamente de letras minúsculas sin acentuaciones ni símbolos de ningún tipo
+    return text_normalizado
+
+
+def get_news_content(busqueda):
     # Parámetros de consulta
-    params = {'q': "uruguay",'apiKey': "b3d238f8fad0471f865cfe444d89fe8a", "language":"e" "s"}
+    params = {'q': busqueda,'apiKey': "b3d238f8fad0471f865cfe444d89fe8a", "language":"e" "s"}
     response = requests.get("https://newsapi.org/v2/everything", params=params)
     # Obtiene los artículos del json
     articles = response.json()['articles']
@@ -24,11 +35,41 @@ def get_news_content():
         lista_noticias.append(article['content'])
     return lista_noticias
 
-news = get_news_content()
-#print(news[0])
-print(news[1])
-list_palabras = news[1].split()
 
-print(list_palabras)
-#print(news[2])
-#print(news[3]
+def calcular_tf(palabras_noticia, palabras_busqueda):
+    terminos_totales = len(palabras_noticia)
+    veces_palabras_en_noticia = {}
+    tf_palabra = {}
+
+    for palabra in palabras_noticia:
+        if palabra in palabras_busqueda:
+            if palabra in veces_palabras_en_noticia:
+                veces_palabras_en_noticia[palabra] += 1
+            else:
+                veces_palabras_en_noticia[palabra] = 1
+
+    for item in veces_palabras_en_noticia:
+
+            tf_palabra[item] = veces_palabras_en_noticia[item] / terminos_totales
+
+    return tf_palabra
+
+
+def calcular_idf(lista_noticias, palabras_busqueda):
+
+    idf_palabra = {}
+    total_noticias = len(lista_noticias)
+
+
+    for termino in palabras_busqueda:
+        noticias_con_termino = 0
+        for noticia in lista_noticias:
+            if termino in noticia:
+                noticias_con_termino += 1
+
+        idf = math.log(total_noticias / noticias_con_termino, 10)
+
+        idf_palabra[termino] = idf
+
+    return idf_palabra
+

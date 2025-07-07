@@ -1,0 +1,63 @@
+Objetivo:
+    Encontrar las 3 noticias más relevantes para una búsqueda según el algoritmo TF-IDF
+
+
+    1. Determinar la búsqueda:
+
+Definir un input en el que registrar la búsqueda del usuario y almacenarlo en una
+variable.
+
+
+    2. Buscar noticias:
+
+a. Normalizar:
+
+Aplicar función de normalización utilizada en el anterior trabajo grupal con una
+modificación para admitir espacios (" "), de modo que podamos leer los términos
+por separado.
+
+b. Emplear el módulo requests para generar una función con la que buscar noticias y
+quedarnos con su contenido en una lista.
+
+
+    3. Procesos búsqueda
+
+a. Separar en términos:
+
+Convertir la búsqueda en una lista de términos. Se puede utilizar el método .split()
+o un loop for.
+
+a2(bonus). Eliminar stopwords:
+
+Comparar cada término de la búsqueda con los términos del archivo
+'RestringidasNormalizadas.txt', eliminando los que se encuentran contenidos en él.
+
+
+b. Analizar frecuencia de los términos (TF):
+
+Aplicar fórmula TF: Dividir la cantidad de veces que aparece un término en una
+noticia entre el total de términos de la misma.
+
+- Loop for para hacerlo en cada elemento de la lista de noticias
+- Generar un diccionario con los términos como claves y sus puntajes como valores.
+
+c. Obtener la frecuencia inversa (IDF):
+
+Aplicar fórmula IDF: El logaritmo base 10 del cociente entre la cantidad de noticias
+analizadas (longitud de la lista de noticias) y la cantidad de noticias que contienen
+al término que se evalúa.
+
+- Loop for para hacerlo en cada elemento de la lista de noticias
+- Generar un diccionario con los términos como claves y sus puntajes como valores.
+
+d. Produtcto TF * IDF:
+
+Multiplicar los puntajes TF e IDF de cada término resultará en un puntaje "TF-IDF"
+para el término en cada noticia.
+
+- Loop for para hacerlo en cada elemento de la lista de noticias
+- Generar un diccionario con los términos como claves y sus puntajes como valores.
+
+    4. Devolver las tres noticias más relevantes:
+
+Generar una lista en la cual agregar las noticias de indice 0, 1 y 2 de una lista ordenada de noticias según puntaje
